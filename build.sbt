@@ -4,7 +4,7 @@ import laika.config.*
 ThisBuild / tlBaseVersion := "0.0"
 ThisBuild / startYear     := Some(2024)
 ThisBuild / licenses      := Seq(License.Apache2)
-ThisBuild / tlJdkRelease  := Some(11)
+ThisBuild / tlJdkRelease  := Some(17)
 
 ThisBuild / developers := List(
   tlGitHubDev("ChristopherDavenport", "Christopher Davenport"),
@@ -15,7 +15,7 @@ ThisBuild / developers := List(
 ThisBuild / tlSitePublishBranch        := Some("main")
 ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17"))
 
-ThisBuild / crossScalaVersions := Seq("2.13.15", "3.3.4")
+ThisBuild / crossScalaVersions := Seq("2.13.18", "3.3.7")
 
 lazy val root = tlCrossRootProject.aggregate(catscript, examples)
 
@@ -25,19 +25,19 @@ lazy val catscript = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .settings(
     name := "catscript",
     libraryDependencies ++= List(
-      "org.typelevel" %% "cats-core"      % "2.12.0",
-      "org.typelevel" %% "alleycats-core" % "2.12.0",
-      "org.typelevel" %% "cats-effect"    % "3.5.4",
-      "co.fs2"        %% "fs2-core"       % "3.10.2",
-      "co.fs2"        %% "fs2-io"         % "3.10.2",
-      "co.fs2"        %% "fs2-scodec"     % "3.10.2",
-      "org.scodec"    %% "scodec-bits"    % "1.2.0",
+      "org.typelevel" %% "cats-core"      % "2.13.0",
+      "org.typelevel" %% "alleycats-core" % "2.13.0",
+      "org.typelevel" %% "cats-effect"    % "3.7.0",
+      "co.fs2"        %% "fs2-core"       % "3.13.0",
+      "co.fs2"        %% "fs2-io"         % "3.13.0",
+      "co.fs2"        %% "fs2-scodec"     % "3.13.0",
+      "org.scodec"    %% "scodec-bits"    % "1.2.4",
       "org.scodec" %% "scodec-core" % (if (scalaVersion.value.startsWith("2."))
                                          "1.11.10"
-                                       else "2.3.0"),
+                                       else "2.3.3"),
       // Testing
-      "com.disneystreaming" %% "weaver-cats"       % "0.8.4" % Test,
-      "com.disneystreaming" %% "weaver-scalacheck" % "0.8.4" % Test
+      "org.typelevel" %% "weaver-cats"       % "0.12.0" % Test,
+      "org.typelevel" %% "weaver-scalacheck" % "0.12.0" % Test
     ),
     mimaPreviousArtifacts := Set()
   )
