@@ -13,7 +13,7 @@ It is generally possible to create empty files and directories using the `create
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -34,7 +34,7 @@ end Creating
 @:choice(static)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.Catscript
+import org.typelevel.gatos.Gatos
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -44,8 +44,8 @@ object Creating extends IOApp.Simple:
 
   def run: IO[Unit] =
     for
-      _ <- Catscript.createFile(filePath)
-      created <- Catscript.exists(filePath)
+      _ <- Gatos.createFile(filePath)
+      created <- Gatos.exists(filePath)
       _ <- IO.println(s"File created? $created")
     yield ()
 
@@ -63,7 +63,7 @@ Here, we are first creating the file using the `createFile` method and then chec
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -80,7 +80,7 @@ end Creating
 @:choice(static)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.Catscript
+import org.typelevel.gatos.Gatos
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -89,8 +89,8 @@ object Creating extends IOApp.Simple:
   val emptyDirectories = Path("create/me/first")
 
   def run: IO[Unit] =
-    Catscript.createDirectories(emptyDirectories) >> 
-      Catscript.createFile(Path("now_i_can_be_created.fs"))
+    Gatos.createDirectories(emptyDirectories) >> 
+      Gatos.createFile(Path("now_i_can_be_created.fs"))
 
 end Creating
 ```
@@ -132,7 +132,7 @@ Deleting a file is as easy as using the `delete` method:
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -153,7 +153,7 @@ end Deleting
 @:choice(static)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.Catscript
+import org.typelevel.gatos.Gatos
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -163,8 +163,8 @@ object Deleting extends IOApp.Simple:
 
   def run: IO[Unit] =
     for
-      exists <- Catscript.exists(annoyingFile)
-      _ <- if exists then Catscript.delete(annoyingFile)
+      exists <- Gatos.exists(annoyingFile)
+      _ <- if exists then Gatos.delete(annoyingFile)
            else IO.unit
     yield ()
 
@@ -180,7 +180,7 @@ Note that we are first checking if the file exists before deleting it, this is b
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 import fs2.io.file.Path
 import cats.syntax.applicative.* // You can instead import cats.syntax.all.* !
 import cats.effect.{IO, IOApp}
@@ -201,7 +201,7 @@ end Deleting
 @:choice(static)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.Catscript
+import org.typelevel.gatos.Gatos
 import fs2.io.file.Path
 import cats.syntax.applicative.* // You can instead import cats.syntax.all.* !
 import cats.effect.{IO, IOApp}
@@ -212,8 +212,8 @@ object Deleting extends IOApp.Simple:
 
   def run: IO[Unit] =
     for
-      exists <- Catscript.exists(annoyingFile)
-      _ <- Catscript.delete(annoyingFile).whenA(exists)
+      exists <- Gatos.exists(annoyingFile)
+      _ <- Gatos.delete(annoyingFile).whenA(exists)
     yield ()
 
 end Deleting
@@ -228,7 +228,7 @@ Or even better, use the convenience method `deleteIfExists`:
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -248,7 +248,7 @@ end Deleting
 @:choice(static)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.Catscript
+import org.typelevel.gatos.Gatos
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -258,7 +258,7 @@ object Deleting extends IOApp.Simple:
 
   def run: IO[Unit] =
     for
-      deleted <- Catscript.deleteIfExists(annoyingFile)
+      deleted <- Gatos.deleteIfExists(annoyingFile)
       _ <- IO.println(s"Are they reaching out? $deleted")
     yield ()
 
@@ -295,7 +295,7 @@ Finally, you may want to delete not one but multiple files and directories, here
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -311,7 +311,7 @@ end Deleting
 @:choice(static)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.Catscript
+import org.typelevel.gatos.Gatos
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -319,7 +319,7 @@ object Deleting extends IOApp.Simple:
 
   val nonEmptyFolder = Path("downloads/non empty folder")
 
-  def run: IO[Unit] = Catscript.deleteRecursively(nonEmptyFolder)
+  def run: IO[Unit] = Gatos.deleteRecursively(nonEmptyFolder)
 
 end Deleting
 ```
@@ -370,7 +370,7 @@ The former takes as a parameter a function that describes how you want to use th
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 import cats.syntax.all.*
 import cats.effect.{IO, IOApp}
 
@@ -389,16 +389,16 @@ end Temporary
 @:choice(static)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.Catscript
+import org.typelevel.gatos.Gatos
 import cats.syntax.all.*
 import cats.effect.{IO, IOApp}
 
 object Temporary extends IOApp.Simple:
 
-  def run: IO[Unit] = Catscript.withTempFile: path =>
+  def run: IO[Unit] = Gatos.withTempFile: path =>
     for
-      _ <- Catscript.writeLines(path, LazyList.from('a').map(_.toChar.toString).take(26))
-      alphabet <- Catscript.read(path)
+      _ <- Gatos.writeLines(path, LazyList.from('a').map(_.toChar.toString).take(26))
+      alphabet <- Gatos.read(path)
       _ <- IO.println("ASCII took hispanics into account!").whenA(alphabet.contains('ñ'))
     yield ()
 
@@ -416,7 +416,7 @@ The last alternative is with `createTempFile` or `createTempDirectory`. The diff
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -437,7 +437,7 @@ end Temporary
 @:choice(static)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.Catscript
+import org.typelevel.gatos.Gatos
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -445,11 +445,11 @@ object Temporary extends IOApp.Simple:
 
   val secretPath = Path(".secrets/to_my_secret_lover.txt")
 
-  def run: IO[Unit] = Catscript.createTempFile.flatMap: path =>
+  def run: IO[Unit] = Gatos.createTempFile.flatMap: path =>
     for
-      _ <- Catscript.write(path,"A confession to my lover: ")
-      letter <- Catscript.read(secretPath)
-      _ <- Catscript.appendLine(path, letter)
+      _ <- Gatos.write(path,"A confession to my lover: ")
+      letter <- Gatos.read(secretPath)
+      _ <- Gatos.appendLine(path, letter)
     yield ()
 
 end Temporary

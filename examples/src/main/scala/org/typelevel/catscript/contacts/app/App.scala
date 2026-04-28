@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package org.typelevel.catscript.contacts.app
+package org.typelevel.gatos.contacts.app
 
 import cats.syntax.applicative.*
 import cats.effect.{ExitCode, IO, IOApp}
 import fs2.io.file.Path
 
-import org.typelevel.catscript.contacts.cli.{Cli, Prompt}
-import org.typelevel.catscript.contacts.core.ContactManager
-import org.typelevel.catscript.contacts.domain.argument.*
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.contacts.cli.{Cli, Prompt}
+import org.typelevel.gatos.contacts.core.ContactManager
+import org.typelevel.gatos.contacts.domain.argument.*
+import org.typelevel.gatos.syntax.path.*
 
 object App extends IOApp {
 
   private val getOrCreateBookPath: IO[Path] = for {
     home <- userHome
-    dir  = home / ".catscript"
+    dir  = home / ".gatos"
     path = dir / "contacts.data"
     exists <- path.exists
     _      <- dir.createDirectories.unlessA(exists)

@@ -2,20 +2,20 @@
 
 ## Which API should I use?
 
-In Catscript, you have two different ways of doing things:
+In GatOS, you have two different ways of doing things:
 
-- First, if you prefer a more concise syntax, use the extension methods (e.g. `path.read()`) by importing the `catscript.syntax.path.*` package. 
+- First, if you prefer a more concise syntax, use the extension methods (e.g. `path.read()`) by importing the `gatos.syntax.path.*` package. 
 
-- If you prefer calling static methods, use direct method calls on the `Catscript` object (e.g., `Catscript.read(path)`). You can also import all the functions inside the `catscript.Catscript` package if you don't want to call the `Catscript` object every time (e.g., `read(path)`). 
+- If you prefer calling static methods, use direct method calls on the `Gatos` object (e.g., `Gatos.read(path)`). You can also import all the functions inside the `gatos.Gatos` package if you don't want to call the `Gatos` object every time (e.g., `read(path)`). 
 
-In this documentation we'll call the methods on the `Catscript` objects in the static variant to differentiate them from the extension ones.  
+In this documentation we'll call the methods on the `Gatos` objects in the static variant to differentiate them from the extension ones.  
 
 @:select(api-style)
 
 @:choice(syntax)
 
 ```scala 3
-import catscript.syntax.all.*
+import gatos.syntax.all.*
 
 val path = Path("data/test.txt")
 
@@ -28,13 +28,13 @@ yield ()
 @:choice(static)
 
 ```scala 3
-import catscript.Catscript
+import gatos.Gatos
 
 val path = Path("data/test.txt")
 
 for
-  file <- Catscript.read(path)
-  _    <- Catscript.append(path, "I'll place this here.")
+  file <- Gatos.read(path)
+  _    <- Gatos.append(path, "I'll place this here.")
 yield ()
 ```
 
@@ -44,11 +44,11 @@ Which one you should use really depends on your preferences and choices; if you 
 
 ## Imports
 
-If you just want to start scripting right away, importing `catscript.*` will do the trick; it imports all the extension methods and functionality you need, such as types and functions, to start working right away.
+If you just want to start scripting right away, importing `gatos.*` will do the trick; it imports all the extension methods and functionality you need, such as types and functions, to start working right away.
 
-But if you want more concise functionality, the `catscript.syntax.path.*` will only import the extension methods.
+But if you want more concise functionality, the `gatos.syntax.path.*` will only import the extension methods.
 
-For the static methods, the `catscript.Catscript` will provide the functions to work with files, if that is your preferred style.
+For the static methods, the `gatos.Gatos` will provide the functions to work with files, if that is your preferred style.
 
 
 ## Talking about computations

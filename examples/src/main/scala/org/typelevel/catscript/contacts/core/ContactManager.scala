@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.typelevel.catscript.contacts.core
+package org.typelevel.gatos.contacts.core
 
 import cats.syntax.all.*
 import cats.effect.IO
 import fs2.io.file.Path
-import org.typelevel.catscript.syntax.path.*
-import org.typelevel.catscript.contacts.domain.contact.*
+import org.typelevel.gatos.syntax.path.*
+import org.typelevel.gatos.contacts.domain.contact.*
 
 trait ContactManager {
   def addContact(contact: Contact): IO[Username]

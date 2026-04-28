@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.typelevel.catscript.contacts.cli
+package org.typelevel.gatos.contacts.cli
 
 import cats.effect.IO
 import cats.syntax.all.*
 
-import org.typelevel.catscript.contacts.core.ContactManager
-import org.typelevel.catscript.contacts.domain.flag.*
-import org.typelevel.catscript.contacts.domain.contact.*
+import org.typelevel.gatos.contacts.core.ContactManager
+import org.typelevel.gatos.contacts.domain.flag.*
+import org.typelevel.gatos.contacts.domain.contact.*
 
 object Cli {
 

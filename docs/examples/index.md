@@ -71,7 +71,7 @@ import cats.effect.{IO, IOApp}
 
 import fs2.io.file.Path
 
-import catscript.syntax.path.*
+import gatos.syntax.path.*
 
 object Scores extends IOApp.Simple:
 
@@ -105,7 +105,7 @@ import cats.effect.{IO, IOApp}
 
 import fs2.io.file.Path
 
-import catscript.Catscript
+import gatos.Gatos
 
 object Scores extends IOApp.Simple:
 
@@ -123,10 +123,10 @@ object Scores extends IOApp.Simple:
 
   def run: IO[Unit] =
     for
-      lines  <- Catscript.readLines(path)
+      lines  <- Gatos.readLines(path)
       scores <- lines.traverse(parseScore(_).liftTo[IO])
       _      <- IO(scores.foreach(score => println(score.show)))
-      _      <- Catscript.appendLine(path, Score("daniela", 100).show)
+      _      <- Gatos.appendLine(path, Score("daniela", 100).show)
     yield ()
 
 end Scores
@@ -206,7 +206,7 @@ Here, the complete script:
 import cats.effect.{IO, IOApp}
 import fs2.io.file.Path
 
-import catscript.syntax.path.*
+import gatos.syntax.path.*
 
 object Uppercase extends IOApp.Simple:
 
@@ -228,7 +228,7 @@ end Uppercase
 import cats.effect.{IO, IOApp}
 import fs2.io.file.Path
 
-import catscript.syntax.Catscript
+import gatos.syntax.Gatos
 
 object Uppercase extends IOApp.Simple:
 
@@ -237,8 +237,8 @@ object Uppercase extends IOApp.Simple:
 
   def run: IO[Unit] =
     for
-      file <- Catscript.read(path)
-      _    <- Catscript.write(upperPath, file.toUpperCase)
+      file <- Gatos.read(path)
+      _    <- Gatos.write(upperPath, file.toUpperCase)
     yield ()
 
 end Uppercase
@@ -270,7 +270,7 @@ end Uppercase
 
 ## Places
 
-Catscript can handle binary files in custom binary formats since it includes [scodec](https://scodec.org/). In this example, we are going to create a binary file with a list of places.  
+GatOS can handle binary files in custom binary formats since it includes [scodec](https://scodec.org/). In this example, we are going to create a binary file with a list of places.  
 
 We start by defining type representations of the data we are going to work with:  
 
@@ -326,7 +326,7 @@ import fs2.io.file.Path
 import scodec.codecs.*
 import scodec.Codec
 
-import catscript.syntax.path.*
+import gatos.syntax.path.*
 
 object Place extends IOApp.Simple:
 
@@ -358,7 +358,7 @@ import fs2.io.file.Path
 import scodec.codecs.*
 import scodec.Codec
 
-import catscript.syntax.Catscript
+import gatos.syntax.Gatos
 
 object Place extends IOApp.Simple:
 
@@ -368,11 +368,11 @@ object Place extends IOApp.Simple:
 
   def run: IO[Unit] =
     for
-      exists <- Catscript.exists(path)
+      exists <- Gatos.exists(path)
              // Equivalent of doing `if (exists) IO.unit else path.createFile`
-      _      <- Catscript.createFile(path).unlessA(exists)
-      _      <- Catscript.writeAs[Place](path, Place(1, "Michael Phelps"))
-      place  <- Catscript.readAs[Place](path)                                
+      _      <- Gatos.createFile(path).unlessA(exists)
+      _      <- Gatos.writeAs[Place](path, Place(1, "Michael Phelps"))
+      place  <- Gatos.readAs[Place](path)                                
       _      <- IO.println(place)
     yield ()
 

@@ -1,6 +1,6 @@
 # Handling files and doing operations
 
-Beyond simple file reading and writing operations, Catscript allows you to interact directly with the file system. There are functions for creating and deleting files and directories, creating temporary files for short-term use and managing file and directory permissions for added control, among other useful methods.
+Beyond simple file reading and writing operations, GatOS allows you to interact directly with the file system. There are functions for creating and deleting files and directories, creating temporary files for short-term use and managing file and directory permissions for added control, among other useful methods.
 
 ## Creating files and directories
 
@@ -19,9 +19,9 @@ import cats.syntax.all.*
 import fs2.Stream
 import fs2.io.file.{Path, Files}
 
-import org.typelevel.catscript
-import catscript.syntax.path.*
-import catscript.Catscript
+import org.typelevel.gatos
+import gatos.syntax.path.*
+import gatos.Gatos
 
 val path = Path("testdata/dummy.something")
 ```
@@ -31,7 +31,7 @@ val path = Path("testdata/dummy.something")
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import catscript.syntax.path.*
+import gatos.syntax.path.*
 
 val path = Path("path/to/create/file.txt")
 
@@ -41,11 +41,11 @@ path.createFile >> path.exists // Should return true
 @:choice(static)
 
 ```scala mdoc:compile-only
-import catscript.Catscript
+import gatos.Gatos
 
 val path = Path("path/to/create/file.txt")
 
-Catscript.createFile(path) >> Catscript.exists(path) // Should return true
+Gatos.createFile(path) >> Gatos.exists(path) // Should return true
 ```
 
 @:choice(fs2)
@@ -81,7 +81,7 @@ directories.createDirectories >> path.createFile
 val directories = Path("here/are/some/dirs")
 val path = directories / Path("file.txt")
 
-Catscript.createDirectories(directories) >> Catscript.createFile(path)
+Gatos.createDirectories(directories) >> Gatos.createFile(path)
 ```
 
 @:choice(fs2)
@@ -117,10 +117,10 @@ yield ()
 
 ```scala mdoc:compile-only
 for 
-  path <- Catscript.createTempFile
+  path <- Gatos.createTempFile
   
   // It's going to be deleted eventually!
-  _ <- Catscript.write(path, "I don't wanna go!") 
+  _ <- Gatos.write(path, "I don't wanna go!") 
 yield ()
 ```
 
@@ -154,8 +154,8 @@ withTempFile: path =>
 @:choice(static)
 
 ```scala 3 mdoc:compile-only
-Catscript.withTempFile: path =>
-  Catscript.write(path, "I have accepted my fate...")
+Gatos.withTempFile: path =>
+  Gatos.write(path, "I have accepted my fate...")
 ```
 
 @:choice(fs2)
@@ -189,8 +189,8 @@ yield ()
 
 ```scala mdoc:compile-only
 for 
-  dir <- Catscript.createTempDirectory
-  _ <- Catscript.createFile(dir / "tempfile.tmp")
+  dir <- Gatos.createTempDirectory
+  _ <- Gatos.createFile(dir / "tempfile.tmp")
 yield ()
 
 ```
@@ -223,8 +223,8 @@ withTempDirectory: dir =>
 @:choice(static)
 
 ```scala 3 mdoc:compile-only
-Catscript.withTempDirectory: dir =>
-  Catscript.createFile(dir / "its_going_to_go_soon.mp3")
+Gatos.withTempDirectory: dir =>
+  Gatos.createFile(dir / "its_going_to_go_soon.mp3")
 ```
 
 @:choice(fs2)
@@ -258,7 +258,7 @@ linkPath.createSymbolicLink(targetPath)
 val linkPath   = Path("store/the/link/here/symlink")
 val targetPath = Path("path/to/file/to/target.sh")
 
-Catscript.createSymbolicLink(linkPath, targetPath)
+Gatos.createSymbolicLink(linkPath, targetPath)
 ```
 
 @:choice(fs2)
@@ -291,9 +291,9 @@ path.createFile >>
 @:choice(static)
 
 ```scala mdoc:compile-only
-Catscript.createFile(path) >>
-  Catscript.write(path, "TOP SECRET 🚫, MUST DELETE") >>
-    Catscript.delete(path)
+Gatos.createFile(path) >>
+  Gatos.write(path, "TOP SECRET 🚫, MUST DELETE") >>
+    Gatos.delete(path)
 ```
 
 @:choice(fs2)
@@ -329,7 +329,7 @@ path.deleteIfExists >>=
 @:choice(static)
 
 ```scala mdoc:compile-only
-Catscript.deleteIfExists(path) >>= 
+Gatos.deleteIfExists(path) >>= 
   (deleted => IO.println(s"Was the file deleted? $deleted"))
 ```
 
@@ -367,8 +367,8 @@ yield ()
 val dirs = Path("this/folders/will/be/created/and/deleted")
 
 for 
-  _ <- Catscript.createDirectories(dirs)
-  _ <- Catscript.deleteRecursively(dirs) // Will delete all of them!
+  _ <- Gatos.createDirectories(dirs)
+  _ <- Gatos.deleteRecursively(dirs) // Will delete all of them!
 yield ()
 ```
 
@@ -389,7 +389,7 @@ yield ()
 
 ## File operations
 
-catscript provides essential functions for renaming, moving, and copying files, allowing you to efficiently manage your data. These are especially useful in scripting scenarios.  
+gatos provides essential functions for renaming, moving, and copying files, allowing you to efficiently manage your data. These are especially useful in scripting scenarios.  
 
 ### `copy`
 
@@ -417,8 +417,8 @@ val source = Path("source/file/secret.txt")
 val target = Path("target/dir/not_so_secret.txt")
 
 for 
-  _ <- Catscript.write(source, "The no-cloning theorem says you can't copy me!")
-  _ <- Catscript.copy(source, target)
+  _ <- Gatos.write(source, "The no-cloning theorem says you can't copy me!")
+  _ <- Gatos.copy(source, target)
 yield ()
 ```
 
@@ -458,7 +458,7 @@ source.move(target)
 val source = Path("i/cant/move.mp4")
 val target = Path("teleporting/around/movie.mp4")
 
-Catscript.move(source, target)
+Gatos.move(source, target)
 ```
 
 @:choice(fs2)
@@ -502,9 +502,9 @@ val source = Path("need/to/ve/copied/bin.sha256")
 val target = Path("need/to/be/deleted/bin.sha254")
 
 for 
-  _ <- Catscript.delete(target) // Delete before copying to avoid errors (and flags)
-  exists <- Catscript.exists(target)
-  _ <- Catscript.copy(source, target).whenA(exists)
+  _ <- Gatos.delete(target) // Delete before copying to avoid errors (and flags)
+  exists <- Gatos.exists(target)
+  _ <- Gatos.copy(source, target).whenA(exists)
 yield ()
 ```
 
