@@ -1,6 +1,6 @@
 # Using Paths
 
-Catscript is implemented with [fs2-io](https://fs2.io/#/io), and one of the abstraction it provides is [`Path`](https://www.javadoc.io/static/co.fs2/fs2-docs_3/3.8.0/fs2/io/file/Path.html). It represents a path to a file or a directory.  
+GatOS is implemented with [fs2-io](https://fs2.io/#/io), and one of the abstraction it provides is [`Path`](https://www.javadoc.io/static/co.fs2/fs2-docs_3/3.8.0/fs2/io/file/Path.html). It represents a path to a file or a directory.  
 
 You can start using `Path`'s by importing the type from the library: 
 

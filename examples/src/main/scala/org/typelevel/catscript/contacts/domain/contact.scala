@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.typelevel.catscript.contacts.domain
+package org.typelevel.gatos.contacts.domain
 
 import scala.util.control.NoStackTrace
 

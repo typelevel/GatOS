@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.typelevel.catscript.contacts.cli
+package org.typelevel.gatos.contacts.cli
 
-import org.typelevel.catscript.contacts.domain.argument.*
-import org.typelevel.catscript.contacts.domain.flag.*
+import org.typelevel.gatos.contacts.domain.argument.*
+import org.typelevel.gatos.contacts.domain.flag.*
 
 import scala.annotation.tailrec
 

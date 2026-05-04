@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.typelevel.catscript
+package org.typelevel.gatos
 
 import weaver.SimpleIOSuite
 import weaver.scalacheck.Checkers
@@ -32,7 +32,7 @@ import scala.concurrent.duration.*
 
 import syntax.path.*
 
-object CatscriptSpec extends SimpleIOSuite with Checkers {
+object GatosSpec extends SimpleIOSuite with Checkers {
 
   test("The API should delete a file") {
     withTempFile { path =>

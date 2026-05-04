@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package org.typelevel.catscript
-package syntax
+package org.typelevel.gatos.syntax
 
 import cats.effect.IO
-
 import fs2.io.file.*
-
+import org.typelevel.gatos.Gatos
 import scodec.bits.ByteVector
 import scodec.Codec
 
@@ -40,7 +38,7 @@ package object path {
      * @return
      *   The file loaded in memory as a String
      */
-    def read: IO[String] = Catscript.read(path)
+    def read: IO[String] = Gatos.read(path)
 
     /**
      * Reads the contents of the file at the path using the provided charset.
@@ -54,7 +52,7 @@ package object path {
      *   The file loaded in memory as a String
      */
     def read(charset: Charset): IO[String] =
-      Catscript.read(path, charset)
+      Gatos.read(path, charset)
 
     /**
      * Reads the contents of the file at the path and returns it as a
@@ -64,7 +62,7 @@ package object path {
      * @return
      *   The file loaded in memory as a ByteVector
      */
-    def readBytes: IO[ByteVector] = Catscript.readBytes(path)
+    def readBytes: IO[ByteVector] = Gatos.readBytes(path)
 
     /**
      * Reads the contents of the file at the path using UTF-8 decoding and
@@ -76,7 +74,7 @@ package object path {
      * @return
      *   The file loaded in memory as a collection of lines of Strings
      */
-    def readLines: IO[List[String]] = Catscript.readLines(path)
+    def readLines: IO[List[String]] = Gatos.readLines(path)
 
     /**
      * Reads the contents of the file and deserializes its contents as `A` using
@@ -90,7 +88,7 @@ package object path {
      * @return
      *   The file loaded in memory as a type `A`
      */
-    def readAs[A: Codec]: IO[A] = Catscript.readAs(path)
+    def readAs[A: Codec]: IO[A] = Gatos.readAs(path)
 
     // Write operations:
 
@@ -104,7 +102,7 @@ package object path {
      * @param contents
      *   The contents to write to the file
      */
-    def write(contents: String): IO[Unit] = Catscript.write(path, contents)
+    def write(contents: String): IO[Unit] = Gatos.write(path, contents)
 
     /**
      * This function overwrites the contents of the file at the path using the
@@ -119,7 +117,7 @@ package object path {
      *   The charset to use to encode the file
      */
     def write(contents: String, charset: Charset): IO[Unit] =
-      Catscript.write(path, contents, charset)
+      Gatos.write(path, contents, charset)
 
     /**
      * This function overwrites the contents of the file at the path with the
@@ -131,7 +129,7 @@ package object path {
      *   The contents to write to the file
      */
     def writeBytes(contents: ByteVector): IO[Unit] =
-      Catscript.writeBytes(path, contents)
+      Gatos.writeBytes(path, contents)
 
     /**
      * This function overwrites the contents of the file at the path using UTF-8
@@ -144,7 +142,7 @@ package object path {
      *   The contents to write to the file
      */
     def writeLines(contents: Seq[String]): IO[Unit] =
-      Catscript.writeLines(path, contents)
+      Gatos.writeLines(path, contents)
 
     /**
      * The functions writes the contents of the file at the path with the
@@ -162,7 +160,7 @@ package object path {
      *   The codec that translates the type A into a ByteVector
      */
     def writeAs[A: Codec](contents: A): IO[Unit] =
-      Catscript.writeAs(path, contents)
+      Gatos.writeAs(path, contents)
 
     /**
      * Similar to `write`, but appends to the file instead of overwriting it.
@@ -173,7 +171,7 @@ package object path {
      * @param contents
      *   The contents to write to the file
      */
-    def append(contents: String): IO[Unit] = Catscript.append(path, contents)
+    def append(contents: String): IO[Unit] = Gatos.append(path, contents)
 
     /**
      * Similar to `write`, but appends to the file instead of overwriting it.
@@ -191,7 +189,7 @@ package object path {
         contents: String,
         charset: Charset
     ): IO[Unit] =
-      Catscript.append(path, contents, charset)
+      Gatos.append(path, contents, charset)
 
     /**
      * Similar to `write`, but appends to the file instead of overwriting it.
@@ -203,7 +201,7 @@ package object path {
      *   The contents to write to the file
      */
     def appendBytes(contents: ByteVector): IO[Unit] =
-      Catscript.appendBytes(path, contents)
+      Gatos.appendBytes(path, contents)
 
     /**
      * Similar to `write`, but appends to the file instead of overwriting it.
@@ -216,7 +214,7 @@ package object path {
      *   The contents to write to the file
      */
     def appendLines(contents: Seq[String]): IO[Unit] =
-      Catscript.appendLines(path, contents)
+      Gatos.appendLines(path, contents)
 
     /**
      * Similar to append, but appends a single line to the end file as a newline
@@ -230,7 +228,7 @@ package object path {
      *   The contents to write to the file
      */
     def appendLine(contents: String): IO[Unit] =
-      Catscript.appendLine(path, contents)
+      Gatos.appendLine(path, contents)
 
     /**
      * Similar to `write`, but appends to the file instead of overwriting it
@@ -246,7 +244,7 @@ package object path {
      *   The codec that translates the type A into a ByteVector
      */
     def appendAs[A: Codec](contents: A): IO[Unit] =
-      Catscript.appendAs[A](path, contents)
+      Gatos.appendAs[A](path, contents)
 
     // File operations:
 
@@ -256,7 +254,7 @@ package object path {
      * `path.copy(target, CopyFlags(CopyFlag.ReplaceExisting))`.
      */
     def copy(target: Path): IO[Unit] =
-      Catscript.copy(path, target, CopyFlags.empty)
+      Gatos.copy(path, target, CopyFlags.empty)
 
     /**
      * Copies the source to the target, following any directives supplied in the
@@ -264,25 +262,25 @@ package object path {
      * this can be overridden via CopyFlag.ReplaceExisting.
      */
     def copy(target: Path, flags: CopyFlags): IO[Unit] =
-      Catscript.copy(path, target, flags)
+      Gatos.copy(path, target, flags)
 
     /**
      * Creates the specified directory with the permissions of "rwxrwxr-x" by
      * default. Fails if the parent path does not already exist.
      */
-    def createDirectory: IO[Unit] = Catscript.createDirectory(path)
+    def createDirectory: IO[Unit] = Gatos.createDirectory(path)
 
     /**
      * Creates the specified directory with the specified permissions. Fails if
      * the parent path does not already exist.
      */
     def createDirectory(permissions: Permissions): IO[Unit] =
-      Catscript.createDirectory(path, permissions)
+      Gatos.createDirectory(path, permissions)
 
     /**
      * Creates the specified directory and any non-existent parent directories.
      */
-    def createDirectories: IO[Unit] = Catscript.createDirectories(path)
+    def createDirectories: IO[Unit] = Gatos.createDirectories(path)
 
     /**
      * Creates the specified directory and any parent directories, using the
@@ -290,55 +288,55 @@ package object path {
      * this operation.
      */
     def createDirectories(permissions: Permissions): IO[Unit] =
-      Catscript.createDirectories(path, permissions)
+      Gatos.createDirectories(path, permissions)
 
     /**
      * Creates the specified file with the permissions of "rw-rw-r--" by
      * default. Fails if the parent path does not already exist.
      */
-    def createFile: IO[Unit] = Catscript.createFile(path)
+    def createFile: IO[Unit] = Gatos.createFile(path)
 
     /**
      * Creates the specified file with the specified permissions. Fails if the
      * parent path does not already exist.
      */
     def createFile(permissions: Permissions): IO[Unit] =
-      Catscript.createFile(path, permissions)
+      Gatos.createFile(path, permissions)
 
     /** Creates a hard link with an existing file. */
     def createLink(existing: Path): IO[Unit] =
-      Catscript.createLink(path, existing)
+      Gatos.createLink(path, existing)
 
     /** Creates a symbolic link which points to the supplied target. */
     def createSymbolicLink(target: Path): IO[Unit] =
-      Catscript.createSymbolicLink(path, target)
+      Gatos.createSymbolicLink(path, target)
 
     /**
      * Creates a symbolic link which points to the supplied target with optional
      * permissions.
      */
     def createSymbolicLink(target: Path, permissions: Permissions): IO[Unit] =
-      Catscript.createSymbolicLink(path, target, permissions)
+      Gatos.createSymbolicLink(path, target, permissions)
 
     // Deletion
     /**
      * Deletes the specified file or empty directory, failing if it does not
      * exist.
      */
-    def delete: IO[Unit] = Catscript.delete(path)
+    def delete: IO[Unit] = Gatos.delete(path)
 
     /**
      * Deletes the specified file or empty directory, passing if it does not
      * exist.
      */
-    def deleteIfExists: IO[Boolean] = Catscript.deleteIfExists(path)
+    def deleteIfExists: IO[Boolean] = Gatos.deleteIfExists(path)
 
     /**
      * Deletes the specified file or directory. If the path is a directory and
      * is non-empty, its contents are recursively deleted. Symbolic links are
      * not followed (but are deleted).
      */
-    def deleteRecursively: IO[Unit] = Catscript.deleteRecursively(path)
+    def deleteRecursively: IO[Unit] = Gatos.deleteRecursively(path)
 
     /**
      * Deletes the specified file or directory. If the path is a directory and
@@ -346,34 +344,34 @@ package object path {
      * followed when `followLinks` is true.
      */
     def deleteRecursively(followLinks: Boolean): IO[Unit] =
-      Catscript.deleteRecursively(path, followLinks)
+      Gatos.deleteRecursively(path, followLinks)
 
     /**
      * Returns true if the specified path exists. Symbolic links are followed --
      * see the overload for more details on links.
      */
-    def exists: IO[Boolean] = Catscript.exists(path)
+    def exists: IO[Boolean] = Gatos.exists(path)
 
     /**
      * Returns true if the specified path exists. Symbolic links are followed
      * when `followLinks` is true.
      */
     def exists(followLinks: Boolean): IO[Boolean] =
-      Catscript.exists(path, followLinks)
+      Gatos.exists(path, followLinks)
 
     /**
      * Gets `BasicFileAttributes` for the supplied path. Symbolic links are not
      * followed.
      */
     def getBasicFileAttributes: IO[BasicFileAttributes] =
-      Catscript.getBasicFileAttributes(path)
+      Gatos.getBasicFileAttributes(path)
 
     /**
      * Gets `BasicFileAttributes` for the supplied path. Symbolic links are
      * followed when `followLinks` is true.
      */
     def getBasicFileAttributes(followLinks: Boolean): IO[BasicFileAttributes] =
-      Catscript.getBasicFileAttributes(path, followLinks)
+      Gatos.getBasicFileAttributes(path, followLinks)
 
     /**
      * Gets the last modified time of the supplied path. The last modified time
@@ -381,7 +379,7 @@ package object path {
      * followed.
      */
     def getLastModifiedTime: IO[FiniteDuration] =
-      Catscript.getLastModifiedTime(path)
+      Gatos.getLastModifiedTime(path)
 
     /**
      * Gets the last modified time of the supplied path. The last modified time
@@ -389,92 +387,92 @@ package object path {
      * followed when `followLinks` is true.
      */
     def getLastModifiedTime(followLinks: Boolean): IO[FiniteDuration] =
-      Catscript.getLastModifiedTime(path, followLinks)
+      Gatos.getLastModifiedTime(path, followLinks)
 
     /**
      * Gets the POSIX attributes for the supplied path. Symbolic links are not
      * followed.
      */
     def getPosixFileAttributes: IO[PosixFileAttributes] =
-      Catscript.getPosixFileAttributes(path)
+      Gatos.getPosixFileAttributes(path)
 
     /**
      * Gets the POSIX attributes for the supplied path. Symbolic links are
      * followed when `followLinks` is true.
      */
     def getPosixFileAttributes(followLinks: Boolean): IO[PosixFileAttributes] =
-      Catscript.getPosixFileAttributes(path, followLinks)
+      Gatos.getPosixFileAttributes(path, followLinks)
 
     /**
      * Gets the POSIX permissions of the supplied path. Symbolic links are
      * followed.
      */
     def getPosixPermissions: IO[PosixPermissions] =
-      Catscript.getPosixPermissions(path)
+      Gatos.getPosixPermissions(path)
 
     /**
      * Gets the POSIX permissions of the supplied path. Symbolic links are
      * followed when `followLinks` is true.
      */
     def getPosixPermissions(followLinks: Boolean): IO[PosixPermissions] =
-      Catscript.getPosixPermissions(path, followLinks)
+      Gatos.getPosixPermissions(path, followLinks)
 
     /**
      * Returns true if the supplied path exists and is a directory. Symbolic
      * links are followed.
      */
-    def isDirectory: IO[Boolean] = Catscript.isDirectory(path)
+    def isDirectory: IO[Boolean] = Gatos.isDirectory(path)
 
     /**
      * Returns true if the supplied path exists and is a directory. Symbolic
      * links are followed when `followLinks` is true.
      */
     def isDirectory(followLinks: Boolean): IO[Boolean] =
-      Catscript.isDirectory(path, followLinks)
+      Gatos.isDirectory(path, followLinks)
 
     /** Returns true if the supplied path exists and is executable. */
-    def isExecutable: IO[Boolean] = Catscript.isExecutable(path)
+    def isExecutable: IO[Boolean] = Gatos.isExecutable(path)
 
     /**
      * Returns true if the supplied path is a hidden file (note: may not check
      * for existence).
      */
-    def isHidden: IO[Boolean] = Catscript.isHidden(path)
+    def isHidden: IO[Boolean] = Gatos.isHidden(path)
 
     /** Returns true if the supplied path exists and is readable. */
-    def isReadable: IO[Boolean] = Catscript.isReadable(path)
+    def isReadable: IO[Boolean] = Gatos.isReadable(path)
 
     /**
      * Returns true if the supplied path is a regular file. Symbolic links are
      * followed.
      */
-    def isRegularFile: IO[Boolean] = Catscript.isRegularFile(path)
+    def isRegularFile: IO[Boolean] = Gatos.isRegularFile(path)
 
     /**
      * Returns true if the supplied path is a regular file. Symbolic links are
      * followed when `followLinks` is true.
      */
     def isRegularFile(followLinks: Boolean): IO[Boolean] =
-      Catscript.isRegularFile(path, followLinks)
+      Gatos.isRegularFile(path, followLinks)
 
     /** Returns true if the supplied path is a symbolic link. */
-    def isSymbolicLink: IO[Boolean] = Catscript.isSymbolicLink(path)
+    def isSymbolicLink: IO[Boolean] = Gatos.isSymbolicLink(path)
 
     /** Returns true if the supplied path exists and is writable. */
-    def isWritable: IO[Boolean] = Catscript.isWritable(path)
+    def isWritable: IO[Boolean] = Gatos.isWritable(path)
 
     /** Returns true if the supplied path reference the same file. */
-    def isSameFile(path2: Path): IO[Boolean] = Catscript.isSameFile(path, path2)
+    def isSameFile(path2: Path): IO[Boolean] = Gatos.isSameFile(path, path2)
 
     /** Gets the contents of the specified directory. */
-    def list: IO[List[Path]] = Catscript.list(path)
+    def list: IO[List[Path]] = Gatos.list(path)
 
     /**
      * Moves the source to the target, failing if source does not exist or the
      * target already exists. To replace the existing instead, use
      * `path.move(target, CopyFlags(CopyFlag.ReplaceExisting))`.
      */
-    def move(target: Path): IO[Unit] = Catscript.move(path, target)
+    def move(target: Path): IO[Unit] = Gatos.move(path, target)
 
     /**
      * Moves the source to the target, following any directives supplied in the
@@ -482,11 +480,11 @@ package object path {
      * this can be overridden via `CopyFlag.ReplaceExisting`.
      */
     def move(target: Path, flags: CopyFlags): IO[Unit] =
-      Catscript.move(path, target, flags)
+      Gatos.move(path, target, flags)
 
     // Real Path
     /** Returns the real path i.e. the actual location of `path`. */
-    def realPath: IO[Path] = Catscript.realPath(path)
+    def realPath: IO[Path] = Gatos.realPath(path)
 
     /**
      * Sets the last modified, last access, and creation time fields of the
@@ -498,7 +496,7 @@ package object path {
         creationTime: Option[FiniteDuration],
         followLinks: Boolean
     ): IO[Unit] =
-      Catscript.setFileTimes(
+      Gatos.setFileTimes(
         path,
         lastModified,
         lastAccess,
@@ -511,10 +509,10 @@ package object path {
      * systems.
      */
     def setPosixPermissions(permissions: PosixPermissions): IO[Unit] =
-      Catscript.setPosixPermissions(path, permissions)
+      Gatos.setPosixPermissions(path, permissions)
 
     /** Gets the size of the supplied path, failing if it does not exist. */
-    def size: IO[Long] = Catscript.size(path)
+    def size: IO[Long] = Gatos.size(path)
 
   }
 
@@ -526,7 +524,7 @@ package object path {
    * Alternatively, use `tempFile` to get a resource, which is deleted upon
    * resource finalization.
    */
-  def createTempFile: IO[Path] = Catscript.createTempFile
+  def createTempFile: IO[Path] = Gatos.createTempFile
 
   /**
    * Creates a temporary file. The created file is not automatically deleted -
@@ -550,7 +548,7 @@ package object path {
       suffix: String,
       permissions: Permissions
   ): IO[Path] =
-    Catscript.createTempFile(dir, prefix, suffix, permissions)
+    Gatos.createTempFile(dir, prefix, suffix, permissions)
 
   /**
    * Creates a temporary directory. The created directory is not automatically
@@ -558,7 +556,7 @@ package object path {
    * deleted. Alternatively, use `tempDirectory` to get a resource which deletes
    * upon resource finalization.
    */
-  def createTempDirectory: IO[Path] = Catscript.createTempDirectory
+  def createTempDirectory: IO[Path] = Gatos.createTempDirectory
 
   /**
    * Creates a temporary directory. The created directory is not automatically
@@ -579,19 +577,19 @@ package object path {
       prefix: String,
       permissions: Permissions
   ): IO[Path] =
-    Catscript.createTempDirectory(dir, prefix, permissions)
+    Gatos.createTempDirectory(dir, prefix, permissions)
 
   /** User's current working directory */
-  def currentWorkingDirectory: IO[Path] = Catscript.currentWorkingDirectory
+  def currentWorkingDirectory: IO[Path] = Gatos.currentWorkingDirectory
 
   /** Returns the line separator for the specific OS */
-  def lineSeparator: String = Catscript.lineSeparator
+  def lineSeparator: String = Gatos.lineSeparator
 
   /**
    * Creates a temporary file and deletes it at the end of the use of it.
    */
   def withTempFile[A](use: Path => IO[A]): IO[A] =
-    Catscript.withTempFile(use)
+    Gatos.withTempFile(use)
 
   /**
    * Creates a temporary file and deletes it at the end of the use of it.
@@ -619,13 +617,13 @@ package object path {
       suffix: String,
       permissions: Permissions
   )(use: Path => IO[A]): IO[A] =
-    Catscript.withTempFile(dir, prefix, suffix, permissions)(use)
+    Gatos.withTempFile(dir, prefix, suffix, permissions)(use)
 
   /**
    * Creates a temporary directory and deletes it at the end of the use of it.
    */
   def withTempDirectory[A](use: Path => IO[A]): IO[A] =
-    Catscript.withTempDirectory(use)
+    Gatos.withTempDirectory(use)
 
   /**
    * Creates a temporary directory and deletes it at the end of the use of it.
@@ -651,7 +649,7 @@ package object path {
       prefix: String,
       permissions: Permissions
   )(use: Path => IO[A]): IO[A] =
-    Catscript.withTempDirectory(dir, prefix, permissions)(use)
+    Gatos.withTempDirectory(dir, prefix, permissions)(use)
 
   /** User's home directory */
   def userHome: IO[Path] = Files[IO].userHome

@@ -1,6 +1,6 @@
 # Reading, writing, and appending 
 
-Catscript comes with three different functions for reading and writing operations, `read`, `write` and `append`, each with four different variants: Standalone, `Bytes`, `Lines` and `As`, with these variants you will be able to work with the file and/or its contents as a UTF-8 string or with a custom `java.nio.charset.Charset`, as bytes, line by line, and with a custom codec respectively. 
+GatOS comes with three different functions for reading and writing operations, `read`, `write` and `append`, each with four different variants: Standalone, `Bytes`, `Lines` and `As`, with these variants you will be able to work with the file and/or its contents as a UTF-8 string or with a custom `java.nio.charset.Charset`, as bytes, line by line, and with a custom codec respectively. 
 
 ```scala mdoc:invisible
 // This section adds every import to the code snippets
@@ -11,9 +11,9 @@ import cats.syntax.all.*
 import fs2.Stream
 import fs2.io.file.{Path, Files}
 
-import org.typelevel.catscript
-import catscript.syntax.path.*
-import catscript.Catscript
+import org.typelevel.gatos
+import gatos.syntax.path.*
+import gatos.Gatos
 
 val path = Path("testdata/dummy.something")
 ```
@@ -33,7 +33,7 @@ This function loads the whole file as a string in memory using UTF-8 encoding.
 ```scala mdoc:compile-only
 import cats.syntax.all.*
 
-import catscript.syntax.path.*
+import gatos.syntax.path.*
 
 val path = Path("link/to/your/file.txt")
 
@@ -45,11 +45,11 @@ path.read >>= IO.println
 ```scala scala mdoc:compile-only
 import cats.syntax.all.* 
 
-import catscript.Catscript
+import gatos.Gatos
 
 val path = Path("link/to/your/file.txt")
 
-Catscript.read(path) >>= IO.println
+Gatos.read(path) >>= IO.println
 ```
 
 @:choice(fs2)
@@ -81,7 +81,7 @@ path.read(StandardCharsets.UTF_16)
 ```scala 3 mdoc:compile-only
 import java.nio.charset.StandardCharsets
 
-Catscript.read(path, StandardCharsets.UTF_16)
+Gatos.read(path, StandardCharsets.UTF_16)
 ```
 
 @:choice(fs2)
@@ -113,7 +113,7 @@ path.readBytes.map(_.rotateLeft(2))
 @:choice(static)
 
 ```scala mdoc:compile-only
-Catscript.readBytes(path).map(_.rotateLeft(2))
+Gatos.readBytes(path).map(_.rotateLeft(2))
 ```
 
 @:choice(fs2)
@@ -149,7 +149,7 @@ yield ()
 
 ```scala mdoc:compile-only
 for
-  lines <- Catscript.readLines(path)
+  lines <- Gatos.readLines(path)
   _     <- IO(lines.foreach(println))
 yield ()
 ```
@@ -186,7 +186,7 @@ import scodec.Codec
 
 case class Coordinates(x: Double, y: Double) derives Codec
 
-Catscript.readAs[Coordinates](path).map(coord => coord.x + coord.y)
+Gatos.readAs[Coordinates](path).map(coord => coord.x + coord.y)
 ```
 
 @:choice(fs2)
@@ -250,7 +250,7 @@ val poem =
     |
     |— Robert Herrick""".stripMargin
 
-Catscript.write(path, poem)
+Gatos.write(path, poem)
 ```
 
 @:choice(fs2)
@@ -297,7 +297,7 @@ import java.nio.charset.StandardCharsets
 
 val message = "Java? No thanks, I'm allergic to coffee λ"
 
-Catscript.write(path, message, StandardCharsets.US_ASCII)
+Gatos.write(path, message, StandardCharsets.US_ASCII)
 ```
 
 @:choice(fs2)
@@ -338,7 +338,7 @@ path.writeBytes(niceBytes)
 import scodec.bits.*
 val niceBytes = hex"DeadC0de"
 
-Catscript.writeBytes(path, niceBytes)
+Gatos.writeBytes(path, niceBytes)
 ```
 
 @:choice(fs2)
@@ -389,7 +389,7 @@ val todoList = List(
   "Take the dog for a walk"
 )
 
-Catscript.writeLines(path, todoList)
+Gatos.writeLines(path, todoList)
 ```
 
 @:choice(fs2)
@@ -434,7 +434,7 @@ import scodec.Codec
 
 case class Rectangle(base: Float, height: Float) derives Codec
 
-Catscript.writeAs[Rectangle](path, Rectangle(2.4, 6.0))
+Gatos.writeAs[Rectangle](path, Rectangle(2.4, 6.0))
 ```
 
 @:choice(fs2)
@@ -486,8 +486,8 @@ val path = Path("path/to/append.txt")
 val secretFormula = "And the dish's final secret ingredient is "
 
 for 
-  _ <- Catscript.write(path, secretFormula)
-  _ <- Catscript.append(path, "Rustacean legs! 🦀")
+  _ <- Gatos.write(path, secretFormula)
+  _ <- Gatos.append(path, "Rustacean legs! 🦀")
 yield ()
 
 ```
@@ -529,7 +529,7 @@ path.append("Which encoding I'm I?", StandardCharsets.ISO_8859_1)
 ```scala 3 mdoc:compile-only
 import java.nio.charset.StandardCharsets
 
-Catscript.append(path, "Which encoding I'm I?", StandardCharsets.ISO_8859_1)
+Gatos.append(path, "Which encoding I'm I?", StandardCharsets.ISO_8859_1)
 ```
 
 @:choice(fs2)
@@ -568,8 +568,8 @@ yield ()
 
 ```scala mdoc:compile-only
 for 
-  _ <- Catscript.write(path, "I'm at the top!")
-  _ <- Catscript.appendLine(path, "I'm at the bottom 😞")
+  _ <- Gatos.write(path, "I'm at the top!")
+  _ <- Gatos.appendLine(path, "I'm at the bottom 😞")
 yield ()
 ```
 
@@ -613,9 +613,9 @@ yield ()
 import scodec.bits.ByteVector
 
 for 
-  document  <- Catscript.read(path)
+  document  <- Gatos.read(path)
   signature <- IO(document.hashCode().toByte)
-  _ <- Catscript.appendBytes(path, ByteVector(signature))
+  _ <- Gatos.appendBytes(path, ByteVector(signature))
 yield ()
 ```
 
@@ -663,7 +663,7 @@ val missingIngredients = Vector(
   "500 ml mascarpone, cold."
 )
 
-Catscript.appendLines(path, missingIngredients)
+Gatos.appendLines(path, missingIngredients)
 ```
 
 @:choice(fs2)
@@ -712,7 +712,7 @@ import scodec.codecs.*
 opaque type Ranking = (Int, Long)
 given rankingCodec: Codec[Ranking] = uint8 :: int64
 
-Catscript.appendAs[Ranking](path, (2, 3120948123123L))
+Gatos.appendAs[Ranking](path, (2, 3120948123123L))
 ```
 
 @:choice(fs2)

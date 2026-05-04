@@ -14,13 +14,13 @@ The first thing you need to do is import the `read` method and the `Path` type:
 @:choice(syntax)
 
 ```scala
-import catscript.syntax.path.*
+import gatos.syntax.path.*
 ```
 
 @:choice(static)
 
 ```scala
-import catscript.Catscript
+import gatos.Gatos
 ```
 
 @:@
@@ -71,7 +71,7 @@ object App extends IOApp.Simple:
 
   val path = Path("testdata/readme.txt")
 
-  def run: IO[Unit] = Catscript.read(path)
+  def run: IO[Unit] = Gatos.read(path)
 
 end App
 ```
@@ -91,7 +91,7 @@ path.read.flatMap(file => IO(println(file)))
 @:choice(static)
 
 ```scala
-Catscript.read(path).flatMap(file => IO(println(file)))
+Gatos.read(path).flatMap(file => IO(println(file)))
 ```
 
 @:@
@@ -106,7 +106,7 @@ Now pass the program to the `run` method and everything should go nicely:
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -122,7 +122,7 @@ end App
 @:choice(static)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.Catscript
+import org.typelevel.gatos.Gatos
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -130,7 +130,7 @@ object App extends IOApp.Simple:
 
   val path = Path("testdata/readme.txt")
 
-  def run: IO[Unit] = Catscript.read(path).flatMap(file => IO(println(file)))
+  def run: IO[Unit] = Gatos.read(path).flatMap(file => IO(println(file)))
 
 end App
 ```
@@ -163,7 +163,7 @@ To write to a file, use the `write` function to save the contents to a new file.
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -184,7 +184,7 @@ end App
 @:choice(static)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.Catscript
+import org.typelevel.gatos.Gatos
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -194,9 +194,9 @@ object App extends IOApp.Simple:
 
   def run: IO[Unit] =
     for
-      file <- Catscript.read(path)
+      file <- Gatos.read(path)
       reversedFile = file.reverse
-      _ <- Catscript.write(path, reversedFile)
+      _ <- Gatos.write(path, reversedFile)
     yield ()
 
 end App
@@ -214,7 +214,7 @@ Try loading the contents of two different files, concatenating them, and saving 
 
 ## Working line by line
 
-Catscript provides a method called `readLines`, which reads the file line by line and stores them on a `List[String]`. This comes handy when you are working with a list of things that you want to convert:  
+GatOS provides a method called `readLines`, which reads the file line by line and stores them on a `List[String]`. This comes handy when you are working with a list of things that you want to convert:  
 
 `testdata/names.data`
 
@@ -233,7 +233,7 @@ River
 @:choice(syntax)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -256,7 +256,7 @@ end Names
 @:choice(static)
 
 ```scala mdoc:compile-only
-import org.typelevel.catscript.Catscript
+import org.typelevel.gatos.Gatos
 import fs2.io.file.Path
 import cats.effect.{IO, IOApp}
 
@@ -268,7 +268,7 @@ object Names extends IOApp.Simple:
 
   def run: IO[Unit] =
     for
-      lines <- Catscript.readLines(namesPath)   // (1)
+      lines <- Gatos.readLines(namesPath)   // (1)
       names = lines.map(Name(_))                // (2)
       _ <- IO(names.foreach(println))           // (3)
     yield ()

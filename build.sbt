@@ -16,13 +16,13 @@ ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17"))
 
 ThisBuild / crossScalaVersions := Seq("2.13.18", "3.3.7")
 
-lazy val root = tlCrossRootProject.aggregate(catscript, examples)
+lazy val root = tlCrossRootProject.aggregate(gatos, examples)
 
-lazy val catscript = crossProject(JVMPlatform, JSPlatform, NativePlatform)
+lazy val gatos = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Pure)
-  .in(file("catscript"))
+  .in(file("gatos"))
   .settings(
-    name := "catscript",
+    name := "gatos",
     libraryDependencies ++= List(
       "org.typelevel" %% "cats-core"   % "2.13.0",
       "org.typelevel" %% "cats-effect" % "3.7.0",
@@ -41,16 +41,16 @@ lazy val catscript = crossProject(JVMPlatform, JSPlatform, NativePlatform)
 lazy val examples = project
   .in(file("examples"))
   .enablePlugins(NoPublishPlugin)
-  .dependsOn(catscript.jvm)
+  .dependsOn(gatos.jvm)
   .settings(
-    name                 := "catscript-examples",
+    name                 := "gatos-examples",
     Compile / run / fork := true
   )
 
 lazy val docs = project
   .in(file("site"))
   .enablePlugins(TypelevelSitePlugin)
-  .dependsOn(catscript.jvm)
+  .dependsOn(gatos.jvm)
   .settings(
     libraryDependencies += "co.fs2" %% "fs2-scodec" % "3.13.0",
     laikaConfig := LaikaConfig.defaults

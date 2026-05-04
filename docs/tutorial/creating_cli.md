@@ -49,7 +49,7 @@ examples/
 
 - `app`: This package will contain the main entry point of the application.
 - `cli`: This package will contain the CLI logic such as prompt parsing and command execution.
-- `core`: This package will contain the business logic of the application, here is where we will use Catscript!
+- `core`: This package will contain the business logic of the application, here is where we will use GatOS!
 - `domain`: This package will contain important business logic (mostly types) that `app`, `cli` and `core` will use. 
 
 Let us first start by defining our domain.
@@ -58,7 +58,7 @@ Let us first start by defining our domain.
 Our domain will be straightforward, we will have a `Contact` case class that will represent a contact. 
 
 ```scala
-//src/main/catscript/contacts/domain/contact.scala
+//src/main/gatos/contacts/domain/contact.scala
 type Username    = String
 type Name        = String
 type PhoneNumber = String
@@ -77,7 +77,7 @@ The type aliases are great, not only for added readability, but they also provid
 We will also need a function to display the contact in a nice format.
 
 ```scala 3
-//src/main/catscript/contacts/domain/contact.scala
+//src/main/gatos/contacts/domain/contact.scala
 case class Contact( ... ):
   def show: String = s"""
     |----- $username -----
@@ -93,7 +93,7 @@ We will also define a custom error type that gets thrown when adding an already 
 
 
 ```scala 3
-//src/main/catscript/contacts/domain/contact.scala
+//src/main/gatos/contacts/domain/contact.scala
 case class ContactFound(username: Username) extends NoStackTrace
 ```
 
@@ -102,7 +102,7 @@ This will make `ContactFound` a subtype of `Throwable` and will allow us to prop
 The next step is defining the different commands that our CLI will support.
 
 ```scala 3
-//src/main/catscript/contacts/domain/argument.scala
+//src/main/gatos/contacts/domain/argument.scala
 enum CliCommand:
   case AddContact
   case RemoveContact(username: Username)
@@ -118,7 +118,7 @@ enum CliCommand:
 We will also need a `Flag` type to represent the different options that we can update in a contact.
 
 ```scala 3
-//src/main/catscript/contacts/domain/flag.scala
+//src/main/gatos/contacts/domain/flag.scala
 enum Flag:
   case FirstNameFlag(firstName: String)
   case LastNameFlag(lastName: String)
@@ -133,7 +133,7 @@ Now that we have our domain defined, let us move to the core of our application.
 In this section, we will define the core business logic of our application. We will define a `ContactManager` algebra that will contain all the logic to manage contacts:
 
 ```scala 3
-//src/main/catscript/contacts/core/ContactManager.scala`
+//src/main/gatos/contacts/core/ContactManager.scala`
 trait ContactManager:
 
   // Save a new contact to the contact list
@@ -167,12 +167,12 @@ trait ContactManager:
 end ContactManager
 ```
 
-Now that we have our algebra defined, let us implement it using Catscript. 
+Now that we have our algebra defined, let us implement it using GatOS. 
 
 For that, it's common to implement the interface (or in Scala argot, the *algebra*) in the companion object of the trait:
 
 ```scala 3
-//src/main/catscript/contacts/core/ContactManager.scala
+//src/main/gatos/contacts/core/ContactManager.scala
 object ContactManager:
   
   def apply(bookPath: Path): ContactManager = new ContactManager:
@@ -202,7 +202,7 @@ Once we defined the encoding, we need a function to parse the file representatio
 
 
 ```scala 3
-//src/main/catscript/contacts/core/ContactManager.scala
+//src/main/gatos/contacts/core/ContactManager.scala
 def apply(bookPath: Path): ContactManager = new ContactManager:
   
     private def parseContact(contact: String): IO[Contact] =
@@ -217,7 +217,7 @@ def apply(bookPath: Path): ContactManager = new ContactManager:
 Next, a function to encode the contact to a string:
 
 ```scala 3
-//src/main/catscript/contacts/core/ContactManager.scala
+//src/main/gatos/contacts/core/ContactManager.scala
     private def encodeContact(contact: Contact): String =
       s"${contact.username}|${contact.firstName}|${contact.lastName}|${contact.phoneNumber}|${contact.email}"
 ```
@@ -243,7 +243,7 @@ We first load all the contacts in memory using our `readLines` function and then
 We can now implement the `addContact` function:
 
 ```scala 3
-//src/main/catscript/contacts/core/ContactManager.scala
+//src/main/gatos/contacts/core/ContactManager.scala
 override def addContact(contact: Contact): IO[Username] = 
   for 
     contacts <- getAll                                      // (1)
@@ -259,7 +259,7 @@ First, we read all of our contacts, line by line using the `ContactManager.getAl
 Now that we have the `addContact` function implemented, we can move to the `removeContact` function:
 
 ```scala 3
-//src/main/catscript/contacts/core/ContactManager.scala
+//src/main/gatos/contacts/core/ContactManager.scala
 override def removeContact(username: Username): IO[Unit] =
   for 
     contacts <- getAll
@@ -273,7 +273,7 @@ Here we load all the contacts from the file, and then we filter the ones that do
 Now onto the search functionality. The first one is the `searchId` function:
 
 ```scala 3
-//src/main/catscript/contacts/core/ContactManager.scala
+//src/main/gatos/contacts/core/ContactManager.scala
 override def searchUsername(username: Username): IO[Option[Contact]] =
   getAll.map(contacts => contacts.find(_.username === username))
 ```
@@ -283,7 +283,7 @@ Again we load all the contacts from the file, and then we find the contact that 
 The next three functions are very similar, so we will only show one of them, the `searchName` function:
 
 ```scala 3
-//src/main/catscript/contacts/core/ContactManager.scala
+//src/main/gatos/contacts/core/ContactManager.scala
 override def searchName(name: Name): IO[List[Contact]] =
   getAll.map(contacts =>
     contacts.filter(c => c.firstName === name || c.lastName === name)
@@ -296,7 +296,7 @@ The first part is similar to the previous functions, we load all the contacts fr
 The last function we need to implement is the `updateContact` function. Be aware that this is the most complex function to implement, so we will break it down into smaller parts.
 
 ```scala 3
-//src/main/catscript/contacts/core/ContactManager.scala
+//src/main/gatos/contacts/core/ContactManager.scala
 override def updateContact(
     username: Username
 )(modify: Contact => Contact): IO[Contact] = 
@@ -327,7 +327,7 @@ In this section, we will define our application's command line interface: it wil
 It makes little sense to define the behaviour of the CLI in terms of an interface, as there are only a few ways of interacting with the user via a console. That's why we will just wrap these functionalities in some functions in a `Cli` object:
 
 ```scala 3
-//src/main/catscript/contacts/cli/Cli.scala
+//src/main/gatos/contacts/cli/Cli.scala
 object Cli:
   def addCommand ...
 ```
@@ -337,7 +337,7 @@ One way of passing the `ContactManager` dependency to these functions is to pass
 That said, the first function is going to be the `addCommand`. The idea is to ask the user the contact's information one step at a time and then add it to the contact list:
 
 ```scala 3
-//src/main/catscript/contacts/cli/Cli.scala
+//src/main/gatos/contacts/cli/Cli.scala
 def addCommand(using cm: ContactManager): IO[Unit] =
   for 
     username    <- IO.println("Enter the username: ") >> IO.readLine
@@ -364,7 +364,7 @@ The first five `IO.readLine` calls in the `for` comprehension ask for the contac
 Now the `removeCommand` function:
 
 ```scala 3 
-//src/main/catscript/contacts/cli/Cli.scala
+//src/main/gatos/contacts/cli/Cli.scala
 def removeCommand(username: Username)(using cm: ContactManager): IO[Unit] =
   cm.removeContact(username) >> IO.println(s"Contact $username removed")
 ```
@@ -373,7 +373,7 @@ It simply calls the `removeContact` function and prints a message to the user. T
 The `searchIdCommand` function is also straight forward, matches the `Options` returned by the `searchId` method and prints the user information if it exists:
 
 ```scala 3
-//src/main/catscript/contacts/cli/Cli.scala
+//src/main/gatos/contacts/cli/Cli.scala
 def searchIdCommand(username: Username)(using cm: ContactManager): IO[Unit] =
   for
     contact <- cm.searchId(username)
@@ -386,7 +386,7 @@ def searchIdCommand(username: Username)(using cm: ContactManager): IO[Unit] =
 All the `searchX` variants are fairly similar so we'll show just one of them:
 
 ```scala 3
-//src/main/catscript/contacts/cli/Cli.scala
+//src/main/gatos/contacts/cli/Cli.scala
 def searchEmailCommand(email: Email)(using cm: ContactManager): IO[Unit] =
   for {
     contacts <- cm.searchEmail(email)
@@ -401,7 +401,7 @@ Last but not least, the `updateCommand` function.
 We take as a first parameter the username of the contact we want to update in the database, so we can search for its existence. 
 
 ```scala 3
-//src/main/catscript/contacts/cli/Cli.scala
+//src/main/gatos/contacts/cli/Cli.scala
 def updateCommand(username: Username, options: List[Flag])(
   using cm: ContactManager
 ): IO[Unit] =
@@ -428,7 +428,7 @@ This is also quite a bit of code, but let's break it down:
 First, we call the `updateContact` method of the `ContactManager` and pass the function that will modify the contact. To do this, we're going to reduce the list of flags using `foldLeft`. This function takes an initial value (the contact we want to update) and a function describing how to update the initial value (`acc`) with each one of the flags in turn (`flag`) (1). Where, we just use the `copy` methods and pattern match the flags to update the contact (2). After that, we print a message to the user saying that the contact was updated successfully (3). If the contact is not found, we print a message to the user saying that. 
 
 ```scala 3
-//src/main/catscript/contacts/cli/Cli.scala
+//src/main/gatos/contacts/cli/Cli.scala
 def helpCommand: IO[Unit] =
   IO.println:
     s"""
@@ -464,7 +464,7 @@ We strongly suggest you to use a command line parsing library, like [Decline](ht
 The first thing we'll do is creating a `parsePrompt` function that will pattern match over the user input and, according to the value will return the appropriate `CliCommand`:  
 
 ```scala 3
-//src/main/catscript/contacts/cli/Prompt.scala
+//src/main/gatos/contacts/cli/Prompt.scala
 def parsePrompt(args: List[String]): CliCommand =
   args match 
     case "add" :: Nil                          => AddContact
@@ -485,7 +485,7 @@ end parsePrompt
 We also created a `parseUpdateFlags` function that creates a list of flags that can change the updating behaviour using a similar pattern:  
 
 ```scala 3
-//src/main/catscript/contacts/cli/Prompt.scala`
+//src/main/gatos/contacts/cli/Prompt.scala`
 private def parseUpdateFlags(options: List[String]): List[Flag] = 
 
   @tailrec
@@ -520,14 +520,14 @@ Because the update flags can be unordered, we case use a recursive function to m
 
 Now that we have all the required components we can define the entry point of our application.
 
-The first thing that we need to do is create an initial function that that will create our in-memory database (located at `~/.catscript/contacts.data`) if needed:
+The first thing that we need to do is create an initial function that that will create our in-memory database (located at `~/.gatos/contacts.data`) if needed:
 
 ```scala 3
-//src/main/catscript/contacts/app/App.scala
+//src/main/gatos/contacts/app/App.scala
 private val getOrCreateBookPath: IO[Path] =
   for
     home <- userHome
-    dir  = home / ".catscript"
+    dir  = home / ".gatos"
     path = dir / "contacts.data"
     exists <- path.exists
     _      <- dir.createDirectories.unlessA(exists)
@@ -548,7 +548,7 @@ getOrCreateBookPath
 With that, our main (`run`) function will be like this:
 
 ```scala 3
-//src/main/catscript/contacts/app/App.scala
+//src/main/gatos/contacts/app/App.scala
   .flatMap: 
     case given ContactManager =>
       
@@ -570,13 +570,13 @@ With that, our main (`run`) function will be like this:
 This is what the final code looks like:
 
 ```scala 3
-//src/main/catscript/contacts/app/App.scala
+//src/main/gatos/contacts/app/App.scala
 object App extends IOApp:
 
   private val getOrCreateBookPath: IO[Path] =
     for
       home <- userHome
-      dir  = home / ".catscript"
+      dir  = home / ".gatos"
       path = dir / "contacts.data"
       exists <- path.exists
       _      <- dir.createDirectories.unlessA(exists)
@@ -606,8 +606,8 @@ object App extends IOApp:
 
 And that's it!
 
-We’ve created a simple CLI application that manages contacts using Catscript and Cats Effect.
-We hope you enjoyed this tutorial and learned a lot about how to use Catscript in a real-world application.
+We’ve created a simple CLI application that manages contacts using GatOS and Cats Effect.
+We hope you enjoyed this tutorial and learned a lot about how to use GatOS in a real-world application.
 
 ### Exercise
 We used a hard-coded path to store our contacts.  

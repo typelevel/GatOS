@@ -7,7 +7,7 @@ This section offers possible solutions to the documentation's exercises. Refer t
 ```scala mdoc:compile-only
 import cats.effect.{IO, IOApp}
 import fs2.io.file.Path
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 
 object ReadingSolution extends IOApp.Simple:
 
@@ -28,7 +28,7 @@ end ReadingSolution
 ```scala mdoc:compile-only
 import cats.effect.{IO, IOApp}
 import fs2.io.file.Path
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 
 object WritingSolution extends IOApp.Simple:
 
@@ -50,7 +50,7 @@ end WritingSolution
 ```scala mdoc:compile-only
 import cats.effect.{IO, IOApp}
 import fs2.io.file.Path
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 
 object LinesSolution extends IOApp.Simple:
 
@@ -72,7 +72,7 @@ end LinesSolution
 ```scala mdoc:compile-only
 import cats.effect.IO
 import fs2.io.file.Path
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 
 extension (path: Path) 
   def createFileAndDirectories: IO[Unit] = 
@@ -88,7 +88,7 @@ extension (path: Path)
 import cats.syntax.all.*
 import cats.effect.IO
 import fs2.io.file.Path
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 
 extension (path: Path) 
   def deleteIfChubby(threshold: Long): IO[Boolean] = 
@@ -104,7 +104,7 @@ extension (path: Path)
 ```scala mdoc:compile-only
 import cats.effect.{IO, Resource}
 import fs2.io.file.Path
-import org.typelevel.catscript.syntax.path.*
+import org.typelevel.gatos.syntax.path.*
 
 def makeTempFile: Resource[IO, Path] = 
   Resource.make(createTempFile)(p => p.deleteIfExists.void)

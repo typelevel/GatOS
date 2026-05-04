@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.typelevel.catscript
+package org.typelevel.gatos
 
 import cats.syntax.all.*
 import cats.effect.IO
@@ -29,7 +29,7 @@ import scala.concurrent.duration.FiniteDuration
 
 import java.nio.charset.Charset
 
-object Catscript {
+object Gatos {
 
   private val files: Files[IO] = Files[IO]
 

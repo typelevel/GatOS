@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.typelevel.catscript.contacts.domain
+package org.typelevel.gatos.contacts.domain
 
-import org.typelevel.catscript.contacts.domain.contact.*
-import org.typelevel.catscript.contacts.domain.flag.Flag
+import org.typelevel.gatos.contacts.domain.contact.*
+import org.typelevel.gatos.contacts.domain.flag.Flag
 
 object argument {
   sealed abstract class CliCommand

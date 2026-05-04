@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.typelevel.catscript
+package org.typelevel.gatos
 package syntax
 
 import weaver.SimpleIOSuite
@@ -35,9 +35,9 @@ object SyntaxSpec extends SimpleIOSuite with Checkers {
           _  <- path.write(contents)
           _  <- path.append("Hi from the test!")
           s1 <- path.read
-          _  <- Catscript.write(path, contents)
-          _  <- Catscript.append(path, "Hi from the test!")
-          s2 <- Catscript.read(path)
+          _  <- Gatos.write(path, contents)
+          _  <- Gatos.append(path, "Hi from the test!")
+          s2 <- Gatos.read(path)
         } yield expect.same(s1, s2)
       }
     }
@@ -52,9 +52,9 @@ object SyntaxSpec extends SimpleIOSuite with Checkers {
         _        <- path.createFile
         exists   <- path.exists
         deleted  <- path.deleteIfExists
-        _        <- Catscript.createFile(path)
-        exists2  <- Catscript.exists(path)
-        deleted2 <- Catscript.deleteIfExists(path)
+        _        <- Gatos.createFile(path)
+        exists2  <- Gatos.exists(path)
+        deleted2 <- Gatos.deleteIfExists(path)
       } yield expect(exists && deleted) and expect(exists2 && deleted2)
     }
   }
@@ -70,7 +70,7 @@ object SyntaxSpec extends SimpleIOSuite with Checkers {
         for {
           _  <- original.write(contents)
           _  <- original.copy(copy1)
-          _  <- Catscript.copy(original, copy2)
+          _  <- Gatos.copy(original, copy2)
           s1 <- copy1.read
           s2 <- copy2.read
         } yield expect.same(s1, s2)
@@ -93,8 +93,8 @@ object SyntaxSpec extends SimpleIOSuite with Checkers {
 
           _ <- moved.delete
 
-          _       <- Catscript.write(original, contents)
-          _       <- Catscript.move(original, moved)
+          _       <- Gatos.write(original, contents)
+          _       <- Gatos.move(original, moved)
           exists2 <- moved.exists
         } yield expect(exists && exists2)
       }

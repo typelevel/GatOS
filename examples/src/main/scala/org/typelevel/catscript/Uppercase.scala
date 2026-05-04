@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.typelevel.catscript
+package org.typelevel.gatos
 
 import cats.effect.{IO, IOApp}
 import fs2.io.file.Path
