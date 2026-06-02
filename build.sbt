@@ -33,8 +33,8 @@ lazy val catscript = crossProject(JVMPlatform, JSPlatform, NativePlatform)
                                          "1.11.10"
                                        else "2.3.3"),
       // Testing
-      "org.typelevel" %% "weaver-cats"       % "0.12.0" % Test,
-      "org.typelevel" %% "weaver-scalacheck" % "0.12.0" % Test
+      "org.typelevel" %% "weaver-cats"       % "0.13.0" % Test,
+      "org.typelevel" %% "weaver-scalacheck" % "0.13.0" % Test
     )
   )
 
